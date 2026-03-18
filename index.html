@@ -182,12 +182,12 @@
             color: var(--text-color);
         }
 
-        .location-fields {
+        .input-group {
             display: flex;
             gap: 15px;
         }
 
-            .location-fields input {
+            .input-group input {
                 flex: 1;
             }
 
@@ -279,7 +279,7 @@
         }
 
         @media (max-width: 500px) {
-            .location-fields {
+            .input-group {
                 flex-direction: column;
                 gap: 0;
             }
@@ -304,10 +304,18 @@
 
                 <form id="regForm" class="registration-form">
 
-                    <div class="location-fields">
-                        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
-                        <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+                    <!-- Surname and Other Names side by side -->
+                    <div class="input-group">
+                        <input type="text" id="surname" name="surname" placeholder="Surname" required>
+                        <input type="text" id="other_names" name="other_names" placeholder="Other Names" required>
                     </div>
+
+                    <!-- Gender Dropdown -->
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
 
                     <input type="tel" id="phone" name="phone" placeholder="WhatsApp Phone Number" required>
                     <input type="email" id="email" name="email" placeholder="Email Address" required>
@@ -402,10 +410,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.result === 'success') {
-                        const firstName = document.getElementById('first_name').value;
+                        // Grab the new 'surname' value for the alert
+                        const surname = document.getElementById('surname').value;
 
                         // 1. Show a quick success message so you know it worked
-                        alert(`Success! ${firstName} is registered. A WhatsApp message has been sent to them.`);
+                        alert(`Success! ${surname} is registered. A WhatsApp message has been sent to them.`);
 
                         // 2. Instantly reset the form for the next person
                         form.reset();
@@ -415,6 +424,9 @@
                         // 3. Hide the "Other" location input just in case it was open
                         customLocation.classList.add('hidden');
                         customLocation.removeAttribute('required');
+                        
+                        // 4. Put the focus back on the first input to start the next registration
+                        document.getElementById('surname').focus();
 
                     } else {
                         showError("Error: " + (data.message || "Could not complete registration."));
@@ -432,6 +444,37 @@
             errorMsg.innerText = msg;
             errorMsg.style.display = 'block';
         }
+
+        // ==========================================
+        // 4. ENTER KEY NAVIGATION LOGIC
+        // ==========================================
+        const formElements = Array.from(form.querySelectorAll('input, select, button'));
+        
+        formElements.forEach((element, index) => {
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Stop the form from submitting normally
+                    
+                    // If the user presses enter on the submit button, let it submit
+                    if (element.id === 'submitBtn') {
+                        element.click();
+                        return;
+                    }
+                    
+                    // Find the next visible and enabled element in the form
+                    let nextIndex = index + 1;
+                    while (nextIndex < formElements.length) {
+                        let nextEl = formElements[nextIndex];
+                        // Skip the custom location input if it's currently hidden
+                        if (!nextEl.classList.contains('hidden') && !nextEl.disabled) {
+                            nextEl.focus();
+                            break;
+                        }
+                        nextIndex++;
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
