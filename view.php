@@ -75,7 +75,21 @@ try {
 }
 
 // ==========================================
-// 4. CSV EXPORT LOGIC
+// 4. DELETE LOGIC
+// ==========================================
+if (isset($_GET['delete_id'])) {
+    $delete_id = intval($_GET['delete_id']);
+    $del_stmt = $conn->prepare("DELETE FROM registrations WHERE id = :id");
+    $del_stmt->bindParam(':id', $delete_id, PDO::PARAM_INT);
+    if ($del_stmt->execute()) {
+        // Redirect back to clean the URL after deleting
+        header("Location: view.php");
+        exit();
+    }
+}
+
+// ==========================================
+// 5. CSV EXPORT LOGIC
 // ==========================================
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     header('Content-Type: text/csv; charset=utf-8');
@@ -83,11 +97,11 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     
     $output = fopen('php://output', 'w');
     
-    // Add CSV Headers
-    fputcsv($output, array('ID', 'First Name', 'Last Name', 'Phone (WhatsApp)', 'Email', 'Location', 'Registration Date'));
+    // Add CSV Headers (Updated for new fields)
+    fputcsv($output, array('ID', 'Surname', 'Other Names', 'Gender', 'Phone (WhatsApp)', 'Email', 'Location', 'Registration Date'));
     
     // Fetch Data
-    $stmt = $conn->prepare("SELECT id, first_name, last_name, phone, email, location, registration_date FROM registrations ORDER BY id DESC");
+    $stmt = $conn->prepare("SELECT id, surname, other_names, gender, phone, email, location, created_at FROM registrations ORDER BY id DESC");
     $stmt->execute();
     
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -98,9 +112,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 }
 
 // ==========================================
-// 5. FETCH DATA FOR DASHBOARD
+// 6. FETCH DATA FOR DASHBOARD
 // ==========================================
-$stmt = $conn->prepare("SELECT * FROM registrations ORDER BY registration_date DESC");
+$stmt = $conn->prepare("SELECT * FROM registrations ORDER BY created_at DESC");
 $stmt->execute();
 $registrations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $total_registered = count($registrations);
@@ -129,6 +143,10 @@ $total_registered = count($registrations);
         .btn-logout { background-color: #333; color: white; margin-left: 10px; }
         .btn-logout:hover { background-color: #555; }
         
+        /* New Delete Button Style */
+        .btn-delete { background-color: #ff6b6b; color: white; padding: 6px 10px; border-radius: 4px; border: none; cursor: pointer; text-decoration: none; font-size: 13px; }
+        .btn-delete:hover { background-color: #ff4757; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
         th { background-color: #f8f9fa; color: #555; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
@@ -162,28 +180,35 @@ $total_registered = count($registrations);
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Surname</th>
+                    <th>Other Names</th>
+                    <th>Gender</th>
                     <th>WhatsApp</th>
-                    <th>Email</th>
                     <th>Location</th>
                     <th>Date Registered</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($registrations as $index => $row): ?>
                     <tr>
                         <td><?php echo $total_registered - $index; ?></td>
-                        <td><?php echo htmlspecialchars($row['first_name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['last_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['surname']); ?></td>
+                        <td><?php echo htmlspecialchars($row['other_names']); ?></td>
+                        <td><?php echo htmlspecialchars($row['gender']); ?></td>
                         <td>
                             <a href="https://wa.me/<?php echo preg_replace('/[^0-9]/', '', $row['phone']); ?>" target="_blank" style="color: #25D366; text-decoration: none; font-weight: 500;">
                                 <?php echo htmlspecialchars($row['phone']); ?>
                             </a>
                         </td>
-                        <td><?php echo htmlspecialchars($row['email']); ?></td>
                         <td><span style="background:#eee; padding:4px 8px; border-radius:4px; font-size:12px;"><?php echo htmlspecialchars($row['location']); ?></span></td>
-                        <td><?php echo date('M j, Y g:i A', strtotime($row['registration_date'])); ?></td>
+                        <td><?php echo date('M j, Y g:i A', strtotime($row['created_at'])); ?></td>
+                        <td>
+                            <!-- Delete Button -->
+                            <a href="?delete_id=<?php echo $row['id']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to permanently delete this registration?');">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
