@@ -8,11 +8,11 @@ session_start();
 $admin_password = "revivaladmin2026"; 
 
 // Use Laravel Cloud environment variables, fallback to local XAMPP
-$host = getenv('DB_HOST') ?: "localhost";
-$port = getenv('DB_PORT') ?: "3306";
-$db_name = getenv('DB_DATABASE') ?: "mass_revival";
-$username = getenv('DB_USERNAME') ?: "root"; 
-$password = getenv('DB_PASSWORD') ?: ""; 
+$host = $_SERVER['DB_HOST'] ?? getenv('DB_HOST') ?: "ep-old-mountain-a5t9f9ew.aws-us-east-2.pg.laravel.cloud"; 
+$port = $_SERVER['DB_PORT'] ?? getenv('DB_PORT') ?: "5432";
+$db_name = $_SERVER['DB_DATABASE'] ?? getenv('DB_DATABASE') ?: "laravel"; // Defaults to laravel
+$username = $_SERVER['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: "laravel"; 
+$password = $_SERVER['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: "npg_Dp4SxliKvCq5"; 
 
 // ==========================================
 // 2. AUTHENTICATION LOGIC
