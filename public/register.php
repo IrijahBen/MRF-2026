@@ -4,12 +4,13 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 // ==========================================
-// 1. DATABASE CONFIGURATION
+// 1. DATABASE CONFIGURATION (Cloud + Local)
 // ==========================================
-$host = "localhost";
-$db_name = "mass_revival";
-$username = "root"; 
-$password = ""; 
+$host = getenv('DB_HOST') ?: "localhost";
+$port = getenv('DB_PORT') ?: "3306";
+$db_name = getenv('DB_DATABASE') ?: "mass_revival";
+$username = getenv('DB_USERNAME') ?: "root"; 
+$password = getenv('DB_PASSWORD') ?: ""; 
 
 // ==========================================
 // 2. WHATSAPP API CONFIGURATION (e.g., UltraMsg)
@@ -20,7 +21,8 @@ $api_token = "YOUR_API_TOKEN";
 $channel_link = "https://whatsapp.com/channel/YOUR_LINK";
 
 try {
-    $conn = new PDO("mysql:host=" . $host . ";dbname=" . $db_name, $username, $password);
+    // Port added to connection string here
+    $conn = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db_name, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $exception) {
     echo json_encode(["result" => "error", "message" => "Database connection error"]);
