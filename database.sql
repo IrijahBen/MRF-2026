@@ -1,12 +1,15 @@
 CREATE DATABASE IF NOT EXISTS mass_revival;
 USE mass_revival;
 
+DROP TABLE IF EXISTS registrations;
+
 CREATE TABLE IF NOT EXISTS registrations (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    other_names VARCHAR(150) NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    phone VARCHAR(30) NOT NULL,
+    email VARCHAR(150) NOT NULL,
     location VARCHAR(100) NOT NULL,
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
