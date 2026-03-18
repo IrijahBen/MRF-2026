@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mass Revival Fest 2026 | Registration</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- CSS VARIABLES (Updated to Mass Revival Fest Theme) --- */
+        :root {
+            --bg-color: #1a0505; /* Deep dark reddish-black */
+            --card-color: #330a0a; /* Dark burgundy matching the flyer background */
+            --text-color: #ffffff; /* Crisp white text */
+            --text-secondary: #ffbba6; /* Soft warm tint for secondary text */
+            --input-bg: #4d1414; /* Slightly lighter burgundy for inputs */
+            --btn-primary: #ffaa00; /* Fiery golden yellow from the MASS logo */
+            --btn-hover: #ff8c00; /* Deep orange for hover state */
+            --link-color: #ffaa00;
+            --message-bg: #591a1a;
+            --toggle-bg: rgba(255, 255, 255, 0.08);
+            --box-shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* LIGHT THEME OVERRIDES */
+        body.light-theme {
+            --bg-color: #fdf5f5; /* Very light warm tint */
+            --card-color: #ffffff;
+            --text-color: #330a0a; /* Dark burgundy text for readability */
+            --text-secondary: #8a3a3a; /* Muted red for secondary text */
+            --input-bg: #fae6e6; /* Soft red-tinted inputs */
+            --btn-primary: #cc1111; /* Strong revival red for light theme */
+            --btn-hover: #990a0a;
+            --link-color: #cc1111;
+            --message-bg: #ffe0e0;
+            --toggle-bg: rgba(0, 0, 0, 0.08);
+            --box-shadow-light: 0 8px 25px rgba(204, 17, 17, 0.15);
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- THEME TOGGLE BUTTON --- */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+            #theme-toggle:hover {
+                color: var(--link-color);
+                border-color: var(--link-color);
+                box-shadow: 0 2px 15px rgba(255, 170, 0, 0.4); /* Glow effect matches primary color */
+            }
+
+        /* --- CONTAINER --- */
+        .registration-container {
+            display: flex;
+            max-width: 1100px;
+            width: 100%;
+            background-color: var(--card-color);
+            border-radius: 16px;
+            box-shadow: var(--box-shadow-dark);
+            overflow: hidden;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.light-theme .registration-container {
+            box-shadow: var(--box-shadow-light);
+        }
+
+        /* --- LEFT PANEL (VISUAL) --- */
+        .visual-panel {
+            flex: 1;
+            min-width: 400px;
+            padding: 30px;
+            position: relative;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 600px;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Updated gradient overlay to complement the burgundy theme */
+            background: linear-gradient(135deg, rgba(26, 5, 5, 0.4), rgba(51, 10, 10, 0.7)), url('mass.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        body.light-theme .image-placeholder {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4)), url('mass.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* --- RIGHT PANEL (FORM) --- */
+        .form-panel {
+            flex: 1;
+            min-width: 400px;
+            padding: 50px 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+            .form-panel h1 {
+                font-size: 32px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+        .form-instruction {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* INPUTS & SELECTS */
+        .registration-form input[type="text"],
+        .registration-form input[type="email"],
+        .registration-form input[type="tel"],
+        .registration-form select {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 15px;
+            background-color: var(--input-bg);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 15px;
+            transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+        }
+
+            .registration-form input:focus,
+            .registration-form select:focus {
+                outline: none;
+                border-color: var(--btn-primary);
+            }
+
+        body.light-theme .registration-form input,
+        body.light-theme .registration-form select {
+            color: var(--text-color);
+        }
+
+        .location-fields {
+            display: flex;
+            gap: 15px;
+        }
+
+            .location-fields input {
+                flex: 1;
+            }
+
+        .prayer-note {
+            background-color: var(--message-bg);
+            color: var(--link-color);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--btn-primary);
+        }
+
+        body.light-theme .prayer-note {
+            background-color: var(--message-bg);
+            color: var(--btn-primary);
+        }
+
+        /* BUTTON */
+        .create-account-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--btn-primary);
+            color: #1a0505; /* Dark text for contrast against the yellow button */
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        body.light-theme .create-account-btn {
+            color: #ffffff; /* White text for the red button in light mode */
+        }
+
+        .create-account-btn:hover {
+            background-color: var(--btn-hover);
+        }
+
+        .create-account-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            padding: 10px;
+            background: rgba(255,0,0,0.1);
+            border-radius: 6px;
+        }
+
+        /* --- RESPONSIVE / MOBILE STYLES --- */
+        @media (max-width: 900px) {
+            body {
+                padding: 10px;
+            }
+
+            .registration-container {
+                flex-direction: column;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .visual-panel {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 30px 20px;
+                min-width: auto;
+                width: 100%;
+            }
+
+                .form-panel h1 {
+                    font-size: 26px;
+                }
+        }
+
+        @media (max-width: 500px) {
+            .location-fields {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-sun"></i></button>
+
+    <div class="registration-container">
+
+        <div class="visual-panel">
+            <div class="image-placeholder"></div>
+        </div>
+
+        <div class="form-panel">
+
+            <div id="registration-view">
+                <h1>Mass Revival Fest</h1>
+                <p class="form-instruction">Please fill out the form below to register.</p>
+
+                <form id="regForm" class="registration-form">
+
+                    <div class="location-fields">
+                        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+                        <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+                    </div>
+
+                    <input type="tel" id="phone" name="phone" placeholder="WhatsApp Phone Number" required>
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+
+                    <select id="locationSelect" name="location" required>
+                        <option value="" disabled selected>Select your location</option>
+                        <option value="Ibadan">Ibadan</option>
+                        <option value="Lagos">Lagos</option>
+                        <option value="Ogbomoso">Ogbomoso</option>
+                        <option value="Other">Other (Please specify)</option>
+                    </select>
+
+                    <input type="text" id="customLocation" name="custom_location" class="hidden" placeholder="Type your city/location">
+
+                    <div class="prayer-note">
+                        Date: 20th March 2026 | Chapel Tarmac, UI
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="create-account-btn">Register Now</button>
+                    <div id="error-msg" class="error-message"></div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. THEME TOGGLE LOGIC
+        // ==========================================
+        const themeBtn = document.getElementById('theme-toggle');
+        const icon = themeBtn.querySelector('i');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+
+        function applyTheme(t) {
+            if (t === 'light') {
+                document.body.classList.add('light-theme');
+                icon.className = 'fas fa-moon';
+            } else {
+                document.body.classList.remove('light-theme');
+                icon.className = 'fas fa-sun';
+            }
+        }
+
+        applyTheme(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.body.classList.contains('light-theme');
+            const newTheme = isLight ? 'dark' : 'light';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // ==========================================
+        // 2. LOCATION DROPDOWN LOGIC
+        // ==========================================
+        const locationSelect = document.getElementById('locationSelect');
+        const customLocation = document.getElementById('customLocation');
+
+        locationSelect.addEventListener('change', function () {
+            if (this.value === 'Other') {
+                customLocation.classList.remove('hidden');
+                customLocation.setAttribute('required', 'required');
+            } else {
+                customLocation.classList.add('hidden');
+                customLocation.removeAttribute('required');
+                customLocation.value = '';
+            }
+        });
+
+        // ==========================================
+        // 3. FORM SUBMISSION LOGIC (To PHP)
+        // ==========================================
+        const form = document.getElementById('regForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMsg = document.getElementById('error-msg');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing Registration...";
+            errorMsg.style.display = 'none';
+
+            const formData = new FormData(form);
+
+            // Fetch API sending to register.php
+            fetch('register.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        const firstName = document.getElementById('first_name').value;
+
+                        // 1. Show a quick success message so you know it worked
+                        alert(`Success! ${firstName} is registered. A WhatsApp message has been sent to them.`);
+
+                        // 2. Instantly reset the form for the next person
+                        form.reset();
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Register Now";
+
+                        // 3. Hide the "Other" location input just in case it was open
+                        customLocation.classList.add('hidden');
+                        customLocation.removeAttribute('required');
+
+                    } else {
+                        showError("Error: " + (data.message || "Could not complete registration."));
+                    }
+                })
+                .catch(error => {
+                    showError("Connection Failed. Ensure your PHP server is running.");
+                    console.error('Error!', error);
+                });
+        });
+
+        function showError(msg) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Register Now";
+            errorMsg.innerText = msg;
+            errorMsg.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
