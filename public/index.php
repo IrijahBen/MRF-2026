@@ -317,7 +317,7 @@
                         <option value="Female">Female</option>
                     </select>
 
-                    <input type="tel" id="phone" name="phone" placeholder="WhatsApp Phone Number" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
                     <input type="email" id="email" name="email" placeholder="Email Address" required>
 
                     <select id="locationSelect" name="location" required>
