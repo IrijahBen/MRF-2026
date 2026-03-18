@@ -42,8 +42,9 @@ function formatPhoneNumber($phone) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Sanitize inputs
-    $first_name = htmlspecialchars(strip_tags($_POST['first_name'] ?? ''));
-    $last_name = htmlspecialchars(strip_tags($_POST['last_name'] ?? ''));
+    $surname = htmlspecialchars(strip_tags($_POST['surname'] ?? ''));
+    $other_names = htmlspecialchars(strip_tags($_POST['other_names'] ?? ''));
+    $gender = htmlspecialchars(strip_tags($_POST['gender'] ?? ''));
     $raw_phone = htmlspecialchars(strip_tags($_POST['phone'] ?? ''));
     $email = htmlspecialchars(strip_tags($_POST['email'] ?? ''));
     
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $location = htmlspecialchars(strip_tags($_POST['custom_location'] ?? ''));
     }
 
-    if (empty($first_name) || empty($last_name) || empty($raw_phone) || empty($email) || empty($location)) {
+    if (empty($surname) || empty($other_names) || empty($gender) || empty($raw_phone) || empty($email) || empty($location)) {
         echo json_encode(["result" => "error", "message" => "All fields are required."]);
         exit();
     }
@@ -61,11 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formatted_phone = formatPhoneNumber($raw_phone);
 
     // Insert into database
-    $query = "INSERT INTO registrations (first_name, last_name, phone, email, location) VALUES (:first_name, :last_name, :phone, :email, :location)";
+    $query = "INSERT INTO registrations (surname, other_names, gender, phone, email, location) VALUES (:surname, :other_names, :gender, :phone, :email, :location)";
     $stmt = $conn->prepare($query);
 
-    $stmt->bindParam(':first_name', $first_name);
-    $stmt->bindParam(':last_name', $last_name);
+    $stmt->bindParam(':surname', $surname);
+    $stmt->bindParam(':other_names', $other_names);
+    $stmt->bindParam(':gender', $gender);
     $stmt->bindParam(':phone', $formatted_phone); // Store formatted number
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':location', $location);
@@ -75,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // ==========================================
         // 3. SEND THE AUTOMATED WHATSAPP MESSAGE
         // ==========================================
-        $message = "Shalom {$first_name}! 🔥\n\nYour registration for the *Mass Revival Fest 2026* is confirmed.\n\nDate: 20th March 2026\nVenue: Chapel Tarmac, UI.\n\nTo receive updates, prayer points, and instructions before the convergence, please join our official channel right now by clicking this link:\n{$channel_link}\n\nWe look forward to hosting you!";
+        $message = "Shalom {$surname}! 🔥\n\nYour registration for the *Mass Revival Fest 2026* is confirmed.\n\nDate: 20th March 2026\nVenue: Chapel Tarmac, UI.\n\nTo receive updates, prayer points, and instructions before the convergence, please join our official channel right now by clicking this link:\n{$channel_link}\n\nWe look forward to hosting you!";
 
         // Setup cURL for the WhatsApp API
         $curl = curl_init();
