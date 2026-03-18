@@ -7,10 +7,12 @@ session_start();
 // Change this password to something secure!
 $admin_password = "revivaladmin2026"; 
 
-$host = "localhost";
-$db_name = "mass_revival";
-$username = "root"; 
-$password = ""; 
+// Use Laravel Cloud environment variables, fallback to local XAMPP
+$host = getenv('DB_HOST') ?: "localhost";
+$port = getenv('DB_PORT') ?: "3306";
+$db_name = getenv('DB_DATABASE') ?: "mass_revival";
+$username = getenv('DB_USERNAME') ?: "root"; 
+$password = getenv('DB_PASSWORD') ?: ""; 
 
 // ==========================================
 // 2. AUTHENTICATION LOGIC
@@ -68,7 +70,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 // 3. DATABASE CONNECTION
 // ==========================================
 try {
-    $conn = new PDO("mysql:host=" . $host . ";dbname=" . $db_name, $username, $password);
+    $conn = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db_name, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $exception) {
     die("Database connection failed: " . $exception->getMessage());
